@@ -60,12 +60,6 @@ st.markdown(f"""
     background-color: {WHITE} !important;
     border-color: #C8B8E8 !important;
   }}
-  /* Force any remaining dark divs inside sidebar widgets to white */
-  [data-testid="stSidebar"] [data-baseweb="select"] div,
-  [data-testid="stSidebar"] [data-baseweb="popover"] div {{
-    background-color: {WHITE} !important;
-    color: {BLACK} !important;
-  }}
   /* Multiselect tags → purple */
   [data-testid="stSidebar"] [data-baseweb="tag"] {{
     background-color: {PURPLE} !important;
