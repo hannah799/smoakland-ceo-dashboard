@@ -47,10 +47,23 @@ st.markdown(f"""
   [data-testid="stSidebar"] label,
   [data-testid="stSidebar"] p,
   [data-testid="stSidebar"] span,
-  [data-testid="stSidebar"] div,
   [data-testid="stSidebar"] h1,
   [data-testid="stSidebar"] h2,
   [data-testid="stSidebar"] h3 {{
+    color: {BLACK} !important;
+  }}
+  /* Multiselect + date input containers — white background, no dark fill */
+  [data-testid="stSidebar"] [data-baseweb="select"] > div:first-child,
+  [data-testid="stSidebar"] [data-baseweb="multi-select"],
+  [data-testid="stSidebar"] [data-baseweb="base-input"],
+  [data-testid="stSidebar"] [data-baseweb="input"] {{
+    background-color: {WHITE} !important;
+    border-color: #C8B8E8 !important;
+  }}
+  /* Force any remaining dark divs inside sidebar widgets to white */
+  [data-testid="stSidebar"] [data-baseweb="select"] div,
+  [data-testid="stSidebar"] [data-baseweb="popover"] div {{
+    background-color: {WHITE} !important;
     color: {BLACK} !important;
   }}
   /* Multiselect tags → purple */
@@ -59,13 +72,21 @@ st.markdown(f"""
     color: {WHITE} !important;
     border-radius: 4px !important;
   }}
-  [data-testid="stSidebar"] [data-baseweb="tag"] span {{
+  [data-testid="stSidebar"] [data-baseweb="tag"] span,
+  [data-testid="stSidebar"] [data-baseweb="tag"] svg {{
     color: {WHITE} !important;
+    fill: {WHITE} !important;
   }}
   /* Date input text */
   [data-testid="stSidebar"] input {{
     color: {BLACK} !important;
     background-color: {WHITE} !important;
+  }}
+  /* Sidebar headings and labels */
+  [data-testid="stSidebar"] .stMarkdown p,
+  [data-testid="stSidebar"] .stMarkdown h3 {{
+    color: {BLACK} !important;
+    font-weight: 600;
   }}
 
   /* ── KPI card ─────────────────────────────────────────────────────────── */
@@ -433,13 +454,24 @@ with col_sources:
 
 with col_search:
     st.markdown('<div class="inline-label">Top Search Terms</div>', unsafe_allow_html=True)
-    st.dataframe(
-        search_scaled.rename(columns={"term": "Term", "searches": "Searches"}),
-        use_container_width=True,
-        hide_index=True,
-        column_config={"Searches": st.column_config.NumberColumn(format="%d")},
-        height=220,
+    rows_html = "".join(
+        f'<tr>'
+        f'<td style="padding:7px 12px;border-bottom:1px solid #D0C0F0;color:{BLACK};font-size:13px;">{row["term"]}</td>'
+        f'<td style="padding:7px 12px;border-bottom:1px solid #D0C0F0;color:{BLACK};font-size:13px;text-align:right;font-weight:600;">{int(row["searches"]):,}</td>'
+        f'</tr>'
+        for _, row in search_scaled.iterrows()
     )
+    st.markdown(f"""
+    <table style="width:100%;border-collapse:collapse;background:#EDE7F6;border-radius:8px;overflow:hidden;font-family:Arial,sans-serif;">
+      <thead>
+        <tr style="background:{PURPLE_LIGHT};">
+          <th style="padding:8px 12px;text-align:left;color:{BLACK};font-size:12px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;">Term</th>
+          <th style="padding:8px 12px;text-align:right;color:{BLACK};font-size:12px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;">Searches</th>
+        </tr>
+      </thead>
+      <tbody>{rows_html}</tbody>
+    </table>
+    """, unsafe_allow_html=True)
 
 # ── Abandon carts + CS chats + Google reviews ─────────────────────────────────
 st.markdown('<div class="section-head">Operations & Customer Experience</div>', unsafe_allow_html=True)
