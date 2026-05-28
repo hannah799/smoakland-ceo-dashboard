@@ -235,8 +235,10 @@ def generate_data():
 df_all, prod_all, city_all, src_all, search_terms = generate_data()
 
 # ── Header ────────────────────────────────────────────────────────────────────
-st.markdown('<div class="dash-title">🌿 Smoakland</div>', unsafe_allow_html=True)
-st.markdown('<div class="dash-sub">CEO Dashboard &nbsp;·&nbsp; Mock Data</div>', unsafe_allow_html=True)
+col_logo, col_spacer = st.columns([2, 8])
+with col_logo:
+    st.image("smoakland_black.webp", width=220)
+st.markdown('<div class="dash-sub" style="margin-top:-8px;">CEO Dashboard &nbsp;·&nbsp; Mock Data</div>', unsafe_allow_html=True)
 st.markdown("---")
 
 # ── Date filter (sidebar) ─────────────────────────────────────────────────────
